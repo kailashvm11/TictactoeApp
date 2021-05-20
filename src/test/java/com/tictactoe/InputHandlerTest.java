@@ -41,6 +41,71 @@ public class InputHandlerTest {
         assertEquals("Enter the coordinates for X", logsList.get(0).getMessage());
 
     }
+    @Test
+    public void shouldNotTakeAlphabetsAsInput() {
+        setInput("abc\n2,3");
+        InputHandler inputHandler= new InputHandler();
+        List<ILoggingEvent> logsList = listAppender.list;
+        inputHandler.readInput();
+        assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
+                logsList.get(1).getMessage());
+
+    }
+
+    @Test
+    public void shouldNotTakeLengthMoreThan3() {
+        setInput("1,34\n2,3");
+        InputHandler inputHandler= new InputHandler();
+        List<ILoggingEvent> logsList = listAppender.list;
+        inputHandler.readInput();
+        assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
+                logsList.get(1).getMessage());
+
+    }
+
+    @Test
+    public void shouldNotTakeLengthLessThan3() {
+        setInput("14\n2,3");
+        InputHandler inputHandler= new InputHandler();
+        List<ILoggingEvent> logsList = listAppender.list;
+        inputHandler.readInput();
+        assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
+                logsList.get(1).getMessage());
+
+    }
+
+    @Test
+    public void shouldFailIfSecondCharacterIsNotComma() {
+        setInput("1 3\n2,3");
+        InputHandler inputHandler= new InputHandler();
+        List<ILoggingEvent> logsList = listAppender.list;
+        inputHandler.readInput();
+        assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
+                logsList.get(1).getMessage());
+
+    }
+
+    @Test
+    public void shouldFailIfFirstCharacterNotBetween1And3() {
+        setInput("9,3\n2,3");
+        InputHandler inputHandler= new InputHandler();
+        List<ILoggingEvent> logsList = listAppender.list;
+        inputHandler.readInput();
+        assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
+                logsList.get(1).getMessage());
+
+    }
+
+    @Test
+    public void shouldFailIfThirdCharacterNotBetween1And3() {
+        setInput("1,9\n2,3");
+        InputHandler inputHandler= new InputHandler();
+        List<ILoggingEvent> logsList = listAppender.list;
+        inputHandler.readInput();
+        assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
+                logsList.get(1).getMessage());
+
+    }
 
     private void setInput(String input) {
         InputStream in = new ByteArrayInputStream(input.getBytes());

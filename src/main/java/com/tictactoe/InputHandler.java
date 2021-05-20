@@ -14,7 +14,35 @@ public class InputHandler {
     }
 
     public String readInput() {
-        logger.info("Enter the coordinates for X");
-        return scanner.nextLine();
+        boolean validInput = false;
+        String input = "";
+        while(!validInput) {
+            logger.info("Enter the coordinates for X");
+            input = scanner.nextLine().trim();
+            validInput = validateInput(input);
+            if(!validInput) {
+                logger.info("Please enter only two numbers between 1 and 3 separated by a comma");
+            }
+        }
+        return input;
     }
+
+    private boolean validateInput(String input) {
+        return isInputLength3(input) && isInputBetween1And3(input.charAt(0)) &&
+                isCharacterComma(input.charAt(1)) && isInputBetween1And3(input.charAt(2));
+    }
+
+
+    private boolean isInputLength3(String input) {
+        return input.length() == 3;
+    }
+
+    private boolean isInputBetween1And3(char ch) {
+        return  ch >= '1' && ch <= '3';
+    }
+
+    private boolean isCharacterComma(char ch) {
+        return ch == ',';
+    }
+
 }
