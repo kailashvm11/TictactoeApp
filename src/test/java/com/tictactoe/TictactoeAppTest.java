@@ -11,6 +11,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class TictactoeAppTest {
 
@@ -24,7 +26,10 @@ class TictactoeAppTest {
         listAppender = new ListAppender<>();
         listAppender.start();
         gameLogger.addAppender(listAppender);
-        game = new TictactoeGame();
+        InputHandler mockInputHandler = mock(InputHandler.class);
+        when(mockInputHandler.readInput())
+                .thenReturn("2,3");
+        game = new TictactoeGame(mockInputHandler);
     }
 
     @Test

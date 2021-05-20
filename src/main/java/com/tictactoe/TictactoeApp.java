@@ -2,7 +2,8 @@ package com.tictactoe;
 
 public class TictactoeApp {
     public static void main( String[] args ) {
-        TictactoeGame game = new TictactoeGame();
+        InputHandler inputHandler = new InputHandler();
+        TictactoeGame game = new TictactoeGame(inputHandler);
         game.start();
     }
 }
