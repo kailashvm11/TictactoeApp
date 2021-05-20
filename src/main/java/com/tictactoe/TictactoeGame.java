@@ -2,8 +2,7 @@ package com.tictactoe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Scanner;
+import java.util.Arrays;
 
 public class TictactoeGame {
 
@@ -13,10 +12,8 @@ public class TictactoeGame {
 
     public TictactoeGame(InputHandler inputHandler) {
         this.inputHandler = inputHandler;
-        for(int i = 0; i < grid.length; i ++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                grid[i][j] = ' ';
-            }
+        for ( char[] row: grid ) {
+            Arrays.fill(row, ' ');
         }
     }
 
@@ -32,10 +29,10 @@ public class TictactoeGame {
 
     private void printGameGrid() {
         printHorizontalGridBorder();
-        for (int i = 0; i < grid.length; i++) {
+        for (char[] row : grid) {
             StringBuilder sb = new StringBuilder("| ");
-            for (int j = 0; j < grid[i].length ; j++) {
-                sb.append(grid[i][j] + " ");
+            for (char cell : row) {
+                sb.append(cell).append(" ");
             }
             sb.append("|");
             log.info(sb.toString());
