@@ -2,6 +2,7 @@ package com.tictactoe;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,9 @@ class TictactoeAppTest {
         gameLogger.addAppender(listAppender);
         InputHandler mockInputHandler = mock(InputHandler.class);
         when(mockInputHandler.readInput())
-                .thenReturn("2,3");
+                .thenReturn("2,3")
+                .thenReturn("1,1")
+                .thenReturn("2,2");
         game = new TictactoeGame(mockInputHandler);
     }
 
@@ -63,6 +66,15 @@ class TictactoeAppTest {
         game.start();
         char[][] grid = game.getGrid();
         assertEquals('X', grid[1][2]);
+    }
+
+    @Test
+    void shouldDisplayGridAfterUpdate() {
+        game.start();
+        List<ILoggingEvent> logsList = listAppender.list;
+        Assertions.assertThat(listAppender.list)
+                .extracting(ILoggingEvent::getFormattedMessage)
+                .contains("|     X |");
     }
 
     @AfterEach
