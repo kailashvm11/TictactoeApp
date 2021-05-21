@@ -253,4 +253,107 @@ class TictactoeAppTest {
             listAppender.list.clear();
         }
     }
+
+    @Nested
+    @DisplayName("Test cases with diaganol row wins")
+    class InputMockTestWithDiaganolRowWins {
+        Logger gameLogger = (Logger) LoggerFactory.getLogger(TictactoeGame.class);
+        TictactoeGame game;
+        ListAppender<ILoggingEvent> listAppender;
+
+        @BeforeEach
+        void setUp() {
+
+            listAppender = new ListAppender<>();
+            listAppender.start();
+            gameLogger.addAppender(listAppender);
+            InputHandler mockInputHandler = mock(InputHandler.class);
+            when(mockInputHandler.readInput('X'))
+                    .thenReturn("1,1")
+                    .thenReturn("2,2")
+                    .thenReturn("1,2")
+                    .thenReturn("3,3");
+            when(mockInputHandler.readInput('O'))
+                    .thenReturn("1,3")
+                    .thenReturn("2,3")
+                    .thenReturn("3,2");
+            game = new TictactoeGame(mockInputHandler);
+        }
+
+        @Test
+        void shouldUpdateGridAfterDiagonalRows() {
+            game.start();
+            char[][] grid = game.getGrid();
+            assertEquals('X', grid[0][0]);
+            assertEquals('X', grid[1][1]);
+            assertEquals('X', grid[2][2]);
+        }
+
+        @Test
+        void shouldBeWinForXWithDiagonalRows() {
+            game.start();
+            List<ILoggingEvent> logsList = listAppender.list;
+            Assertions.assertThat(listAppender.list)
+                    .extracting(ILoggingEvent::getFormattedMessage)
+                    .contains("Player with X mark wins!");
+        }
+
+        @AfterEach
+        void tearDown() {
+            listAppender.stop();
+            listAppender.list.clear();
+        }
+    }
+
+    @Nested
+    @DisplayName("Test cases with back diaganol row wins")
+    class InputMockTestWithBackDiaganolRowWins {
+        Logger gameLogger = (Logger) LoggerFactory.getLogger(TictactoeGame.class);
+        TictactoeGame game;
+        ListAppender<ILoggingEvent> listAppender;
+
+        @BeforeEach
+        void setUp() {
+
+            listAppender = new ListAppender<>();
+            listAppender.start();
+            gameLogger.addAppender(listAppender);
+            InputHandler mockInputHandler = mock(InputHandler.class);
+            when(mockInputHandler.readInput('X'))
+                    .thenReturn("1,1")
+                    .thenReturn("3,2")
+                    .thenReturn("1,2")
+                    .thenReturn("3,3");
+            when(mockInputHandler.readInput('O'))
+                    .thenReturn("1,3")
+                    .thenReturn("2,2")
+                    .thenReturn("2,1")
+                    .thenReturn("3,1");
+            game = new TictactoeGame(mockInputHandler);
+        }
+
+        @Test
+        void shouldUpdateGridAfterBackDiagonalRows() {
+            game.start();
+            char[][] grid = game.getGrid();
+            assertEquals('O', grid[0][2]);
+            assertEquals('O', grid[1][1]);
+            assertEquals('O', grid[2][0]);
+        }
+
+        @Test
+        void shouldBeWinForOWithBackDiagonalRows() {
+            game.start();
+            List<ILoggingEvent> logsList = listAppender.list;
+            Assertions.assertThat(listAppender.list)
+                    .extracting(ILoggingEvent::getFormattedMessage)
+                    .contains("Player with O mark wins!");
+        }
+
+        @AfterEach
+        void tearDown() {
+            listAppender.stop();
+            listAppender.list.clear();
+        }
+    }
 }
