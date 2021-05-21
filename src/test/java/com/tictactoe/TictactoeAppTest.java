@@ -33,11 +33,13 @@ class TictactoeAppTest {
                     .thenReturn("2,3")
                     .thenReturn("1,1")
                     .thenReturn("2,2")
-                    .thenReturn("3,3");
+                    .thenReturn("3,3")
+                    .thenReturn("1,3");
             when(mockInputHandler.readInput('O'))
                     .thenReturn("2,1")
                     .thenReturn("3,1")
-                    .thenReturn("3,2");
+                    .thenReturn("3,2")
+                    .thenReturn("1,2");
             game = new TictactoeGame(mockInputHandler);
         }
 
@@ -97,6 +99,52 @@ class TictactoeAppTest {
             Assertions.assertThat(listAppender.list)
                     .extracting(ILoggingEvent::getFormattedMessage)
                     .contains("| O   X |");
+        }
+
+        @AfterEach
+        void tearDown() {
+            listAppender.stop();
+            listAppender.list.clear();
+        }
+    }
+
+    @Nested
+    @DisplayName("Test cases with conflicting input")
+    class InputMockTestWithConflict {
+        Logger gameLogger = (Logger) LoggerFactory.getLogger(TictactoeGame.class);
+        TictactoeGame game;
+        ListAppender<ILoggingEvent> listAppender;
+
+        @BeforeEach
+        void setUp() {
+
+            listAppender = new ListAppender<>();
+            listAppender.start();
+            gameLogger.addAppender(listAppender);
+            InputHandler mockInputHandler = mock(InputHandler.class);
+            when(mockInputHandler.readInput('X'))
+                    .thenReturn("2,3")
+                    .thenReturn("1,1")
+                    .thenReturn("2,2")
+                    .thenReturn("3,3")
+                    .thenReturn("1,3");
+
+            when(mockInputHandler.readInput('O'))
+                    .thenReturn("2,3")
+                    .thenReturn("2,1")
+                    .thenReturn("3,1")
+                    .thenReturn("3,2")
+                    .thenReturn("1,2");
+            game = new TictactoeGame(mockInputHandler);
+        }
+
+        @Test
+        void shouldDisplayCellAlreadyFilled() {
+            game.start();
+            List<ILoggingEvent> logsList = listAppender.list;
+            Assertions.assertThat(listAppender.list)
+                    .extracting(ILoggingEvent::getFormattedMessage)
+                    .contains("This cell is already filled. Please select another cell");
         }
 
         @AfterEach

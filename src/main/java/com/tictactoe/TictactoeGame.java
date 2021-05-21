@@ -52,9 +52,13 @@ public class TictactoeGame {
     private void updateCoordinatesFromInput(String input,char symbol) {
         int x = Character.getNumericValue(input.charAt(0));
         int y = Character.getNumericValue(input.charAt(2));
-        grid[x - 1][y - 1] = symbol;
-        printGameGrid();
-        turnCount++;
+        if (grid[x - 1][y - 1] == ' ') {
+            grid[x - 1][y - 1] = symbol;
+            printGameGrid();
+            turnCount++;
+        } else {
+            log.info("This cell is already filled. Please select another cell");
+        }
     }
 
     private void printGameGrid() {
