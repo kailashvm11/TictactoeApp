@@ -153,4 +153,53 @@ class TictactoeAppTest {
             listAppender.list.clear();
         }
     }
+
+    @Nested
+    @DisplayName("Test cases with horizontal row wins")
+    class InputMockTestWithHorizontalRowWins {
+        Logger gameLogger = (Logger) LoggerFactory.getLogger(TictactoeGame.class);
+        TictactoeGame game;
+        ListAppender<ILoggingEvent> listAppender;
+
+        @BeforeEach
+        void setUp() {
+
+            listAppender = new ListAppender<>();
+            listAppender.start();
+            gameLogger.addAppender(listAppender);
+            InputHandler mockInputHandler = mock(InputHandler.class);
+            when(mockInputHandler.readInput('X'))
+                    .thenReturn("2,3")
+                    .thenReturn("2,1")
+                    .thenReturn("2,2");
+            when(mockInputHandler.readInput('O'))
+                    .thenReturn("1,1")
+                    .thenReturn("3,1");
+            game = new TictactoeGame(mockInputHandler);
+        }
+
+        @Test
+        void shouldUpdateGridAfterO() {
+            game.start();
+            char[][] grid = game.getGrid();
+            assertEquals('X', grid[1][0]);
+            assertEquals('X', grid[1][1]);
+            assertEquals('X', grid[1][2]);
+        }
+
+        @Test
+        void shouldBeWinForXWithHorizontalRows() {
+            game.start();
+            List<ILoggingEvent> logsList = listAppender.list;
+            Assertions.assertThat(listAppender.list)
+                    .extracting(ILoggingEvent::getFormattedMessage)
+                    .contains("Player with X mark wins!");
+        }
+
+        @AfterEach
+        void tearDown() {
+            listAppender.stop();
+            listAppender.list.clear();
+        }
+    }
 }
