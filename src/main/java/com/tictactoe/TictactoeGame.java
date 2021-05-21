@@ -7,8 +7,10 @@ import java.util.Arrays;
 public class TictactoeGame {
 
     private static final Logger log = LoggerFactory.getLogger(TictactoeGame.class);
+    private int turnCount = 1;
     private char[][] grid = new char[3][3];
     private InputHandler inputHandler;
+
 
     public char[][] getGrid() {
         return grid;
@@ -40,15 +42,19 @@ public class TictactoeGame {
     }
 
     private void play() {
-        String input = inputHandler.readInput();
-        updateCoordinatesFromInput(input);
-        printGameGrid();
+        while(turnCount <= 9) {
+            char symbol = turnCount % 2 == 0 ? 'O' : 'X';
+            String input = inputHandler.readInput(symbol);
+            updateCoordinatesFromInput(input, symbol);
+        }
     }
 
-    private void updateCoordinatesFromInput(String input) {
+    private void updateCoordinatesFromInput(String input,char symbol) {
         int x = Character.getNumericValue(input.charAt(0));
         int y = Character.getNumericValue(input.charAt(2));
-        grid[x - 1][y - 1] = 'X';
+        grid[x - 1][y - 1] = symbol;
+        printGameGrid();
+        turnCount++;
     }
 
     private void printGameGrid() {

@@ -37,8 +37,18 @@ public class InputHandlerTest {
         setInput("2,3");
         InputHandler inputHandler= new InputHandler();
         List<ILoggingEvent> logsList = listAppender.list;
-        assertEquals("2,3", inputHandler.readInput());
+        assertEquals("2,3", inputHandler.readInput('X'));
         assertEquals("Enter the coordinates for X", logsList.get(0).getMessage());
+
+    }
+
+    @Test
+    public void shouldTakeUserInputForO() {
+        setInput("2,3");
+        InputHandler inputHandler= new InputHandler();
+        List<ILoggingEvent> logsList = listAppender.list;
+        assertEquals("2,3", inputHandler.readInput('O'));
+        assertEquals("Enter the coordinates for O", logsList.get(0).getMessage());
 
     }
     @Test
@@ -46,7 +56,7 @@ public class InputHandlerTest {
         setInput("abc\n2,3");
         InputHandler inputHandler= new InputHandler();
         List<ILoggingEvent> logsList = listAppender.list;
-        inputHandler.readInput();
+        inputHandler.readInput('X');
         assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
                 logsList.get(1).getMessage());
 
@@ -57,7 +67,7 @@ public class InputHandlerTest {
         setInput("1,34\n2,3");
         InputHandler inputHandler= new InputHandler();
         List<ILoggingEvent> logsList = listAppender.list;
-        inputHandler.readInput();
+        inputHandler.readInput('X');
         assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
                 logsList.get(1).getMessage());
 
@@ -68,7 +78,7 @@ public class InputHandlerTest {
         setInput("14\n2,3");
         InputHandler inputHandler= new InputHandler();
         List<ILoggingEvent> logsList = listAppender.list;
-        inputHandler.readInput();
+        inputHandler.readInput('X');
         assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
                 logsList.get(1).getMessage());
 
@@ -79,7 +89,7 @@ public class InputHandlerTest {
         setInput("1 3\n2,3");
         InputHandler inputHandler= new InputHandler();
         List<ILoggingEvent> logsList = listAppender.list;
-        inputHandler.readInput();
+        inputHandler.readInput('X');
         assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
                 logsList.get(1).getMessage());
 
@@ -90,7 +100,7 @@ public class InputHandlerTest {
         setInput("9,3\n2,3");
         InputHandler inputHandler= new InputHandler();
         List<ILoggingEvent> logsList = listAppender.list;
-        inputHandler.readInput();
+        inputHandler.readInput('X');
         assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
                 logsList.get(1).getMessage());
 
@@ -101,7 +111,7 @@ public class InputHandlerTest {
         setInput("1,9\n2,3");
         InputHandler inputHandler= new InputHandler();
         List<ILoggingEvent> logsList = listAppender.list;
-        inputHandler.readInput();
+        inputHandler.readInput('X');
         assertEquals("Please enter only two numbers between 1 and 3 separated by a comma",
                 logsList.get(1).getMessage());
 

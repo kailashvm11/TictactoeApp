@@ -13,11 +13,11 @@ public class InputHandler {
         scanner = new Scanner(System.in);
     }
 
-    public String readInput() {
+    public String readInput(char symbol) {
         boolean validInput = false;
         String input = "";
         while(!validInput) {
-            logger.info("Enter the coordinates for X");
+            logger.info("Enter the coordinates for " + symbol);
             input = scanner.nextLine().trim();
             validInput = validateInput(input);
             if(!validInput) {

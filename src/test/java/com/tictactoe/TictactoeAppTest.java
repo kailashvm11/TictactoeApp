@@ -28,10 +28,15 @@ class TictactoeAppTest {
         listAppender.start();
         gameLogger.addAppender(listAppender);
         InputHandler mockInputHandler = mock(InputHandler.class);
-        when(mockInputHandler.readInput())
+        when(mockInputHandler.readInput('X'))
                 .thenReturn("2,3")
                 .thenReturn("1,1")
-                .thenReturn("2,2");
+                .thenReturn("2,2")
+                .thenReturn("3,3");
+        when(mockInputHandler.readInput('O'))
+                .thenReturn("2,1")
+                .thenReturn("3,1")
+                .thenReturn("3,2");
         game = new TictactoeGame(mockInputHandler);
     }
 
@@ -75,6 +80,22 @@ class TictactoeAppTest {
         Assertions.assertThat(listAppender.list)
                 .extracting(ILoggingEvent::getFormattedMessage)
                 .contains("|     X |");
+    }
+
+    @Test
+    void shouldUpdateGridAfterO() {
+        game.start();
+        char[][] grid = game.getGrid();
+        assertEquals('O', grid[1][0]);
+    }
+
+    @Test
+    void shouldDisplayGridAfterOUpdate() {
+        game.start();
+        List<ILoggingEvent> logsList = listAppender.list;
+        Assertions.assertThat(listAppender.list)
+                .extracting(ILoggingEvent::getFormattedMessage)
+                .contains("| O   X |");
     }
 
     @AfterEach
