@@ -68,6 +68,7 @@ public class TictactoeGame {
 
     private void checkWin(char symbol) {
         checkHorizontalRows(symbol);
+        checkVerticalRows(symbol);
         if (isGameCompleted) {
             log.info("Player with " + gameWinner + " mark wins!");
         }
@@ -76,6 +77,15 @@ public class TictactoeGame {
     private void checkHorizontalRows(char symbol) {
         for (int i = 0; i < grid.length; i++) {
             char winSymbol = checkIfEquals(grid[i][0], grid[i][1], grid[i][2]);
+            if (winSymbol == symbol) {
+                setWinner(symbol);
+            }
+        }
+    }
+
+    private void checkVerticalRows(char symbol) {
+        for (int i = 0; i < grid.length; i++) {
+            char winSymbol = checkIfEquals(grid[0][i], grid[1][i], grid[2][i]);
             if (winSymbol == symbol) {
                 setWinner(symbol);
             }

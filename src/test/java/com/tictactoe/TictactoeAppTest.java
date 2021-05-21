@@ -179,7 +179,7 @@ class TictactoeAppTest {
         }
 
         @Test
-        void shouldUpdateGridAfterO() {
+        void shouldUpdateGridAfterHorizontalRows() {
             game.start();
             char[][] grid = game.getGrid();
             assertEquals('X', grid[1][0]);
@@ -194,6 +194,57 @@ class TictactoeAppTest {
             Assertions.assertThat(listAppender.list)
                     .extracting(ILoggingEvent::getFormattedMessage)
                     .contains("Player with X mark wins!");
+        }
+
+        @AfterEach
+        void tearDown() {
+            listAppender.stop();
+            listAppender.list.clear();
+        }
+    }
+
+    @Nested
+    @DisplayName("Test cases with vertical row wins")
+    class InputMockTestWithVerticalRowWins {
+        Logger gameLogger = (Logger) LoggerFactory.getLogger(TictactoeGame.class);
+        TictactoeGame game;
+        ListAppender<ILoggingEvent> listAppender;
+
+        @BeforeEach
+        void setUp() {
+
+            listAppender = new ListAppender<>();
+            listAppender.start();
+            gameLogger.addAppender(listAppender);
+            InputHandler mockInputHandler = mock(InputHandler.class);
+            when(mockInputHandler.readInput('X'))
+                    .thenReturn("3,1")
+                    .thenReturn("2,1")
+                    .thenReturn("1,2")
+                    .thenReturn("2,2");
+            when(mockInputHandler.readInput('O'))
+                    .thenReturn("2,3")
+                    .thenReturn("1,3")
+                    .thenReturn("3,3");
+            game = new TictactoeGame(mockInputHandler);
+        }
+
+        @Test
+        void shouldUpdateGridAfterVerticalRows() {
+            game.start();
+            char[][] grid = game.getGrid();
+            assertEquals('O', grid[0][2]);
+            assertEquals('O', grid[1][2]);
+            assertEquals('O', grid[2][2]);
+        }
+
+        @Test
+        void shouldBeWinForXWithHorizontalRows() {
+            game.start();
+            List<ILoggingEvent> logsList = listAppender.list;
+            Assertions.assertThat(listAppender.list)
+                    .extracting(ILoggingEvent::getFormattedMessage)
+                    .contains("Player with O mark wins!");
         }
 
         @AfterEach
