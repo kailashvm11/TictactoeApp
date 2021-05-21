@@ -58,6 +58,13 @@ class TictactoeAppTest {
         assertEquals("---------", logsList.get(5).getMessage());
     }
 
+    @Test
+    void shouldUpdateGrid() {
+        game.start();
+        char[][] grid = game.getGrid();
+        assertEquals('X', grid[1][2]);
+    }
+
     @AfterEach
     void tearDown() {
         listAppender.stop();

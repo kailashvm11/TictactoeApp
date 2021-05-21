@@ -7,6 +7,23 @@ import java.util.Arrays;
 public class TictactoeGame {
 
     private static final Logger log = LoggerFactory.getLogger(TictactoeGame.class);
+
+    public char[][] getGrid() {
+        return grid;
+    }
+
+    public void setGrid(char[][] grid) {
+        this.grid = grid;
+    }
+
+    public InputHandler getInputHandler() {
+        return inputHandler;
+    }
+
+    public void setInputHandler(InputHandler inputHandler) {
+        this.inputHandler = inputHandler;
+    }
+
     private char[][] grid = new char[3][3];
     private InputHandler inputHandler;
 
@@ -24,7 +41,14 @@ public class TictactoeGame {
     }
 
     private void play() {
-        inputHandler.readInput();
+        String input = inputHandler.readInput();
+        updateCoordinatesFromInput(input);
+    }
+
+    private void updateCoordinatesFromInput(String input) {
+        int x = Character.getNumericValue(input.charAt(0));
+        int y = Character.getNumericValue(input.charAt(2));
+        grid[x - 1][y - 1] = 'X';
     }
 
     private void printGameGrid() {
